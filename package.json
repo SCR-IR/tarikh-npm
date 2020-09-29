@@ -1,0 +1,36 @@
+{
+  "type": "module",
+  "name": "tarikh",
+  "version": "2.0.0",
+  "description": "Jalali, Hijri Shamsi Date",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SCR-IR/tarikh-npm.git"
+  },
+  "keywords": [
+    "Jalali Date",
+    "Persian Date",
+    "Iranian Date",
+    "Jalali Calendar",
+    "Hijri",
+    "Shamsi Date",
+    "Iran Date",
+    "Date",
+    "Iran Calendar",
+    "Calendar",
+    "Jalali Calendar",
+    "jalaliToIslamic",
+    "jDate",
+    "gergorianToJalali"
+  ],
+  "author": "jdf.scr.ir (https://jdf.scr.ir)",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/SCR-IR/tarikh-npm/issues"
+  },
+  "homepage": "https://github.com/SCR-IR/tarikh-npm#readme"
+}
