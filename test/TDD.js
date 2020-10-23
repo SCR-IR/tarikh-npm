@@ -4,12 +4,12 @@ import TarikhObject, * as lib from '../lib/date1.js';
 
 
 /* Long test*/
-// const TEST_START_JD = 1721426; //=year:1 Gregorian (=year:-622 Persian)
-// const TEST_END_JD = 3774532; //=year:5000 Persian
+const TEST_START_JD = 1721426; //=year:1 Gregorian (=year:-622 Persian)
+const TEST_END_JD = 3774532; //=year:5000 Persian
 
 /* Short test*/
-const TEST_START_JD = 2378211; //=year:1178 Persian
-const TEST_END_JD = 2544760; //=year:1633 Persian
+// const TEST_START_JD = 2378211; //=year:1178 Persian
+// const TEST_END_JD = 2544760; //=year:1633 Persian
 
 
 
@@ -57,7 +57,7 @@ loading(' %0');
 
 
 inOutCheck(lib.julianDayFloat_to_julianDay, [
-  [2459137, 2459137.222222222222222222222],
+  [2459137, 2459137],
   [2459137.1896623266, 2459137],
   [2459137.5, 2459138],
   [2459137.5896623266, 2459138],
@@ -364,6 +364,83 @@ inOutCheck(lib.islamicA_to_julianDayFloat, [
   [[1472, 10, 1], 2469979 - 0.5],//out of hilali range
 ]);
 
+
+inOutCheck(lib.check_persian, [
+  [[-32768, 1, 1], false],//out of range
+  [[32768, 1, 1], false],//out of range
+  [[-32767, 1, 1], true],//in range
+  [[32767, 1, 1], true],//in range
+  [[0, 1, 1], true],//... -> Y:-1 -> Y:0 -> Y:1 -> ...
+  [[0, 0, 0], false],//always: M:1-12 & D:1-[29|30|31]
+  [[1, 1, 1], true],
+  [[1400, 0, 0], false],
+  [[1400, 1, 0], false],
+  [[1400, 0, 1], false],
+  [[1400, 13, 1], false],
+  [[1400, 6, 32], false],
+  [[1400, 6, -1], false],
+  [[1400, -6, -1], false],
+  [[1400, -1, 1], false],
+  //
+  [[1399, 1, 1], true],
+  [[1399, 1, 31], true],
+  [[1399, 6, 31], true],
+  [[1399, 7, 1], true],
+  [[1399, 7, 14], true],
+  [[1399, 7, 30], true],
+  [[1399, 7, 31], false],
+  [[1400, 12, 29], true],
+  //
+  [[1374, 12, 30, false], true],//not leap, but strict=false (OFF)
+  [[1374, 12, 31, false], false],//strict=false, but day>30
+  [[1374, 12, 29, false], true],//day: in strict range:29-30
+  [[1374, 10, 29, false], true],//strict range:29-30 -> Only month=12
+  [[1100, 12, 30, true], true],//range: (year<1178 || year>1633) : Always strict=false
+  [[1200, 12, 30], false],//strictDefaultValue= 1178-1633:true , other:false
+  //
+  [[1370, 12, 30], true],//leap
+  [[1374, 12, 30], false],
+  [[1375, 12, 30], true],//**leap
+  [[1376, 12, 30], false],
+  [[1379, 12, 30], true],//leap
+  //
+  [[1398, 12, 30], false],
+  [[1399, 12, 30], true],//leap
+  [[1400, 12, 30], false],
+  [[1401, 12, 30], false],
+  [[1402, 12, 30], false],
+  [[1403, 12, 30], true],//leap
+  [[1404, 12, 30], false],
+  [[1405, 12, 30], false],
+  [[1406, 12, 30], false],
+  [[1407, 12, 30], false],
+  [[1408, 12, 30], true],//**leap
+  [[1409, 12, 30], false],
+]);
+
+inOutCheck(lib.is_persian_Leap, [
+  [1210, true],//**leap
+  [1370, true],//leap
+  [1374, false],
+  [1375, true],//**leap
+  [1376, false],
+  [1379, true],//leap
+  [1398, false],
+  [1399, true],//leap
+  [1400, false],
+  [1401, false],
+  [1402, false],
+  [1403, true],//leap
+  [1404, false],
+  [1405, false],
+  [1406, false],
+  [1407, false],
+  [1408, true],//**leap
+  [1409, false],
+  [1441, true],//**leap
+]);
+
+
 // inOutCheck(jdf., [
 //   [, ],
 //   [, ],
@@ -372,12 +449,12 @@ inOutCheck(lib.islamicA_to_julianDayFloat, [
 //   [, ],
 //   [, ],
 // ]);
-// console.log(lib.persian_to_julianDay(5001,1,1))
+
 loading(' %1');
 {//Convert Test
 
   for (let julianDay = TEST_START_JD; julianDay <= TEST_END_JD; julianDay++) {
-    if (julianDay % 20000 === 0) loading(' %' + ~~((julianDay - TEST_START_JD) * 100 / (TEST_END_JD - TEST_START_JD)));
+    if (julianDay % 20000 === 0) loading(' %' + (1 + ~~((julianDay - TEST_START_JD) * 99 / (TEST_END_JD - TEST_START_JD))));
     let julianDayFloat = lib.julianDay_to_julianDayFloat(julianDay);
 
     /* Err 2.1.x ========================================================= */
